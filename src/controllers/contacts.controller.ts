@@ -25,6 +25,18 @@ export async function getContacts(req : Request, res : Response) : Promise<Respo
     
 }
 
+export async function getContactsByUser(req : Request, res : Response) : Promise<Response | null>{
+
+    //params
+    const idUser : number = parseInt(req.params.idUser);
+
+    const conn = await connect();
+
+    const contacts = await conn.query('SELECT * FROM contacts_directory WHERE user_id = ?', [idUser]);
+
+    return res.json(contacts[0]);
+}
+
 //Get contact by ID:
 export async function getContact(req : Request, res : Response) : Promise<Response | null>{
     

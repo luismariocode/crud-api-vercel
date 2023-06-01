@@ -1,3 +1,4 @@
+
 import { Request, Response } from 'express';
 import { connect } from '../database';
 import { User , UserLogin } from '../interface/User';
@@ -58,19 +59,38 @@ export async function updateUser(req : Request, res : Response) : Promise< Respo
 
 
 // Login Usuario por user y password:
-export async function loginUser(req : Request, res : Response) : Promise< Response | void>{
-    //params
-    const userLogin : UserLogin = req.body;
+export async function loginUser(req: any, res: any): Promise<void> {
+    //parametros
+    const { username, password } = req.body;
+
     const conn = await connect();
-    const users = await conn.query('SELECT * FROM users WHERE user = ? AND password = ?', [userLogin.user, userLogin.password]);
+    const user = await conn.query('SELECT id_user FROM users WHERE user = ? AND password = ?', [username, password]);
 
-    if(users[0] == null){
-        return res.json({message: 'Usuario o contraseña incorrecta'});
-    }else
-    {
-        return res.json( {message: 'Usuario logueado', status: 200, permissions: true});
+    const array = [];
+    array.push(user[0])
+
+    if (array.length > 0) {
+        res.json({
+            message: 'Login correcto', id_user: array[0]
+        });
+    } else {
+        res.json({
+            message: 'Login incorrecto'
+        });
     }
+
+     
+}
+
+// Create Usuario:
+export async function createUser(req : Request, res : Response) : Promise<Response> {
+
+    const newUser : User = req.body;
+    const conn = await connect();
+    await conn.query('INSERT INTO users SET ?', [newUser]);
+
+    return res.json({
+        message: 'New User created'
+    });
     
-
-
-};
+}

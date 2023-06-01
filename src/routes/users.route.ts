@@ -2,7 +2,7 @@ import { Router } from "express";
 const router = Router();
 
 //Controladores
-import { getUsers, getUser , deleteUser, updateUser, loginUser} from '../controllers/users.controller';
+import { getUsers, getUser , deleteUser, updateUser, loginUser, createUser} from '../controllers/users.controller';
 
 
 //Todos los usuarios divididos por tipo de usuario  
@@ -17,7 +17,11 @@ router.route('/details/:idUser')
 
 //Login
 router.route('/login')
-    .get(loginUser)
+    .post(loginUser)
+
+
+router.route('/create')
+    .post(createUser)
 
 
 export default router;

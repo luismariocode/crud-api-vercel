@@ -1,4 +1,5 @@
 import express from 'express';
+import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import cors from 'cors';
@@ -20,6 +21,11 @@ app.use(morgan('dev'));
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+
+// Use body-parser as middlewar
 
 app.get<{}, MessageResponse>('/', (req, res) => {
   res.json({
